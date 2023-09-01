@@ -18,4 +18,12 @@
     "[cmake]": {
         "editor.defaultFormatter": "cheshirekow.cmake-format"
     },
+    "files.exclude": {
+        ".catkin_tools/": true,
+        "build*/": true,
+        "install*/": true,
+        "devel*/": true,
+        "logs*/": true,
+        ".cache*/": true,
+    },
 }
