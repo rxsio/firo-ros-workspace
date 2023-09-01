@@ -1,0 +1,3 @@
+[submodule "src/odrive_driver"]
+	path = src/odrive_driver
+	url = https://github.com/rxsio/odrive_driver.git
