@@ -13,10 +13,31 @@
 				"$catkin-gcc"
 			],
 			"group": {
-				"kind": "build",
-				"isDefault": true
+				"kind": "build"
 			},
 			"label": "catkin: build"
-		}
+		},
+		{
+			"type": "catkin",
+			"args": [
+				"build_compile_cmd"
+			],
+			"problemMatcher": [
+				"$catkin-gcc"
+			],
+			"group": {
+				"kind": "build"
+			},
+			"label": "catkin: export compile commands"
+		},
+		{
+			"label": "catkin: build and export compile commands",
+			"dependsOrder": "sequence",
+			"dependsOn": ["catkin: build", "catkin: export compile commands"],
+			"group": {
+				"kind": "build",
+				"isDefault": true
+			}
+		}		  
 	]
 }
