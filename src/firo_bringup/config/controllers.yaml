@@ -34,6 +34,7 @@ firo:
         pose_covariance_diagonal: [0.0, 0.0, 0.0, 0.0, 0.0, 0.0]
         twist_covariance_diagonal: [0.2, 0.05, 0.05, 0.0, 0.0, 1.0]
         wheel_separation: 0.39955
+        wheel_separation_multiplier: 2
         wheel_radius: 0.0825
         cmd_vel_timeout: 1.0
         linear:
@@ -41,11 +42,11 @@ firo:
             has_velocity_limits: true
             max_velocity: 1.0
             has_acceleration_limits: true
-            max_acceleration: 1.0
+            max_acceleration: 4.0
         angular:
           z:
             has_velocity_limits: true
-            max_velocity: 1.75
+            max_velocity: 2.5028156676260793
             has_acceleration_limits: true
-            max_acceleration: 1.75
+            max_acceleration: 10.011262670504317
         enable_odom_tf: false
