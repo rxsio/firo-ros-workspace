@@ -1,0 +1,17 @@
+<?xml version="1.0"?>
+<package format="2">
+  <name>firo_control</name>
+  <version>1.0.0</version>
+  <description>FIRO controllers and control loop</description>
+
+  <maintainer email="gabriel@gabrielb.dev">Gabriel Brzeziński</maintainer>
+
+  <license>BSD-3</license>
+
+  <buildtool_depend>catkin</buildtool_depend>
+  <depend>roscpp</depend>
+  <depend>controller_manager</depend>
+  <depend>combined_robot_hw</depend>
+  <exec_depend>ros_controllers</exec_depend>
+
+</package>
