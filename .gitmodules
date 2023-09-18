@@ -1,3 +1,9 @@
 [submodule "src/odrive_driver"]
 	path = src/odrive_driver
 	url = https://github.com/rxsio/odrive_driver.git
+[submodule "src/ar_track_alvar"]
+	path = src/ar_track_alvar
+	url = https://github.com/ros-perception/ar_track_alvar.git
+[submodule "src/marker_based_localization"]
+	path = src/marker_based_localization
+	url = https://github.com/rxsio/marker_based_localization.git
