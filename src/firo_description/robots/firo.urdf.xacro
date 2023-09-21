@@ -1,0 +1,106 @@
+<?xml version="1.0" encoding="utf-8"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro" name="sirius_2">
+  <xacro:property name="package" value="firo_description" />
+  <xacro:property name="package_path" value="$(find ${package})" />
+  <xacro:property name="mechanical" value="${xacro.load_yaml(package_path+'/config/mechanical.yaml')}" />
+  <xacro:include filename="$(find ${package})/urdf/torso.urdf.xacro" />
+  <xacro:include filename="$(find ${package})/urdf/wheel.urdf.xacro" />
+  <xacro:include filename="$(find ${package})/urdf/materials.urdf.xacro" />
+ 
+  <link name="base_link" />
+  <xacro:firo_torso material="silver">
+    <xacro:silver/>
+  </xacro:firo_torso>
+  <xacro:firo_wheel material="white" prefix="front_left" reflect="true">
+    <xacro:white/>
+  </xacro:firo_wheel>
+  <xacro:firo_wheel material="white" prefix="front_right" reflect="false">
+    <xacro:white/>
+  </xacro:firo_wheel>
+  <xacro:firo_wheel material="white" prefix="back_left" reflect="true">
+    <xacro:white/>
+  </xacro:firo_wheel>
+  <xacro:firo_wheel material="white" prefix="back_right" reflect="false">
+    <xacro:white/>
+  </xacro:firo_wheel>
+
+  <joint name="base_link_to_torso" type="fixed">
+    <parent link="base_link"/>
+    <child link="torso"/>
+    <origin xyz="0 0 ${mechanical.wheel_radius}"/>
+    <axis xyz="0 0 1"/>
+  </joint>
+
+  <joint name="base_link_to_front_right_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_right_wheel"/>
+    <origin xyz="${mechanical.wheel_base/2} ${-mechanical.wheel_track/2} ${mechanical.wheel_radius}"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="7.5" velocity="7.5"/>
+  </joint>
+  <joint name="base_link_to_front_left_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="front_left_wheel"/>
+    <origin xyz="${mechanical.wheel_base/2} ${mechanical.wheel_track/2} ${mechanical.wheel_radius}"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="7.5" velocity="7.5"/>
+  </joint>
+  <joint name="base_link_to_back_right_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="back_right_wheel"/>
+    <origin xyz="${-mechanical.wheel_base/2} ${-mechanical.wheel_track/2} ${mechanical.wheel_radius}"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="7.5" velocity="7.5"/>
+  </joint>
+  <joint name="base_link_to_back_left_wheel" type="continuous">
+    <parent link="base_link"/>
+    <child link="back_left_wheel"/>
+    <origin xyz="${-mechanical.wheel_base/2} ${mechanical.wheel_track/2} ${mechanical.wheel_radius}"/>
+    <axis xyz="0 1 0"/>
+    <limit effort="7.5" velocity="7.5"/>
+  </joint>
+
+
+  <transmission name="front_right_wheel_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="front_right_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="base_link_to_front_right_wheel">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <transmission name="front_left_wheel_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="front_left_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="base_link_to_front_left_wheel">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <transmission name="back_right_wheel_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="back_right_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="base_link_to_back_right_wheel">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+  <transmission name="back_left_wheel_transmission">
+    <type>transmission_interface/SimpleTransmission</type>
+    <actuator name="back_left_wheel_motor">
+      <mechanicalReduction>1</mechanicalReduction>
+    </actuator>
+    <joint name="base_link_to_back_left_wheel">
+    <hardwareInterface>hardware_interface/VelocityJointInterface</hardwareInterface>
+    </joint>
+  </transmission>
+
+  <gazebo>
+    <plugin name="gazebo_ros_control" filename="libgazebo_ros_control.so">
+      <robotNamespace>/</robotNamespace>
+    </plugin>
+  </gazebo>
+</robot>

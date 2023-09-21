@@ -1,0 +1,32 @@
+<?xml version="1.0"?>
+<robot xmlns:xacro="http://www.ros.org/wiki/xacro">
+  <xacro:macro name="firo_wheel" params="prefix reflect:=false material *gazebo_material package:=^ package_path:=^">
+    <xacro:property name="mechanical" value="${xacro.load_yaml(package_path+'/config/mechanical.yaml')}" />
+    <xacro:property name="inertial" value="${xacro.load_yaml(package_path+'/config/inertial/wheel.yaml')}" />
+    <link name="${prefix}_wheel">
+      <visual>
+        <material name="${material}"/>
+        <geometry>
+          <mesh filename="package://${package}/meshes/visual/wheel.stl"/>
+        </geometry>
+        <origin xyz="0 0 0" rpy="0 0 ${pi if reflect else 0}" />
+      </visual>
+      <inertial>
+        <mass value="${inertial.mass}" />
+        <origin xyz="0 0 0" />
+        <inertia  ixx="${inertial.ixx}" ixy="${inertial.ixy}" ixz="${inertial.ixz}" iyy="${inertial.iyy}" iyz="${inertial.iyz}" izz="${inertial.izz}" />
+      </inertial>
+      <collision>    
+        <geometry>
+          <cylinder length="${mechanical.wheel_width}" radius="${mechanical.wheel_radius}" />
+        </geometry>
+        <origin xyz="0 0 0" rpy="${pi/2} 0 0" />
+      </collision>
+    </link>
+    <gazebo reference="${prefix}_wheel">
+      <visual>  
+        <xacro:insert_block name="gazebo_material" />
+      </visual> 
+    </gazebo>
+  </xacro:macro>
+</robot>
