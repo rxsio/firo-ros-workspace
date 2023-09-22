@@ -3,9 +3,11 @@
   <xacro:property name="package" value="firo_description" />
   <xacro:property name="package_path" value="$(find ${package})" />
   <xacro:property name="mechanical" value="${xacro.load_yaml(package_path+'/config/mechanical.yaml')}" />
-  <xacro:include filename="$(find ${package})/urdf/torso.urdf.xacro" />
-  <xacro:include filename="$(find ${package})/urdf/wheel.urdf.xacro" />
-  <xacro:include filename="$(find ${package})/urdf/materials.urdf.xacro" />
+  <xacro:include filename="${package_path}/urdf/materials.urdf.xacro" />
+  <xacro:include filename="${package_path}/urdf/torso.urdf.xacro" />
+  <xacro:include filename="${package_path}/urdf/wheel.urdf.xacro" />
+  <xacro:include filename="${package_path}/urdf/oak-d-w.urdf.xacro" />
+
  
   <link name="base_link" />
   <xacro:firo_torso material="silver">
@@ -23,6 +25,7 @@
   <xacro:firo_wheel material="white" prefix="back_right" reflect="false">
     <xacro:white/>
   </xacro:firo_wheel>
+  <xacro:oak-d-w prefix="front"/>
 
   <joint name="base_link_to_torso" type="fixed">
     <parent link="base_link"/>
@@ -58,6 +61,12 @@
     <origin xyz="${-mechanical.wheel_base/2} ${mechanical.wheel_track/2} ${mechanical.wheel_radius}"/>
     <axis xyz="0 1 0"/>
     <limit effort="7.5" velocity="7.5"/>
+  </joint>
+
+  <joint name="torso_to_front_camera" type="fixed">
+    <parent link="torso"/>
+    <child link="front_camera_center"/>
+    <origin xyz="0.3001 0 0.12845" rpy="0 0 0"/>
   </joint>
 
 
