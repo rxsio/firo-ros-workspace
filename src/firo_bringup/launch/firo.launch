@@ -1,25 +1,11 @@
 <launch>
-    <rosparam file="$(find firo_bringup)/config/controllers.yaml" command="load"/>
-    <rosparam file="$(find firo_bringup)/config/hardware_interfaces.yaml" command="load"/> 
+    <arg name="model" default="$(find firo_description)/robots/firo.urdf.xacro"/>
+    
+    <include file="$(find firo_description)/launch/firo_description.launch">
+        <arg name="model" value="$(arg model)" />
+    </include>
 
-    <remap from="/firo/controller/wheels/cmd_vel" to="/cmd_vel" />
+    <include file="$(find firo_control)/launch/controllers.launch"/>
+    <include file="$(find firo_control)/launch/hardware_interfaces.launch"/>
 
-    <node name="firo_control" pkg="firo_control" type="firo_control" output="screen"/>
-    <node name="controller_spawner" pkg="controller_manager" type="spawner" respawn="false" output="screen" ns="/"
-        args="
-             /firo/controller/wheels_left_state
-             /firo/controller/wheels_right_state
-             /firo/controller/wheels
-    "/>
-
-    <node name="odrive_driver" pkg="odrive_driver" type="driver.py" output="screen">
-        <remap from="/odrive_driver/wheels_left/motor0/joint_state" to="/wheels_left/motor0/joint_state"/>
-        <remap from="/odrive_driver/wheels_left/motor0/set_joint_state" to="/wheels_left/motor0/set_joint_state"/>
-        <remap from="/odrive_driver/wheels_left/motor1/joint_state" to="/wheels_left/motor1/joint_state"/>
-        <remap from="/odrive_driver/wheels_left/motor1/set_joint_state" to="/wheels_left/motor1/set_joint_state"/>
-        <remap from="/odrive_driver/wheels_right/motor0/joint_state" to="/wheels_right/motor0/joint_state"/>
-        <remap from="/odrive_driver/wheels_right/motor0/set_joint_state" to="/wheels_right/motor0/set_joint_state"/>
-        <remap from="/odrive_driver/wheels_right/motor1/joint_state" to="/wheels_right/motor1/joint_state"/>
-        <remap from="/odrive_driver/wheels_right/motor1/set_joint_state" to="/wheels_right/motor1/set_joint_state"/>
-    </node>
 </launch>

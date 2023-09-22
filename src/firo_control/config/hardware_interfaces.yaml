@@ -1,0 +1,30 @@
+robot_hardware:
+  - wheels_left
+  - wheels_right
+wheels_left:
+  type: odrive/OdriveHWInterface
+  motor0: base_link_to_front_left_wheel
+  motor1: base_link_to_back_left_wheel
+wheels_right:
+  type: odrive/OdriveHWInterface
+  motor0: base_link_to_front_right_wheel
+  motor1: base_link_to_back_right_wheel
+  
+odrive_driver: 
+  drivers: ['wheels_left','wheels_right']
+  wheels_left: 
+    serial_number: '207D39895841'
+    motor0: 
+      reverse_motor: True
+      transmission: 56.25
+    motor1: 
+      reverse_motor: True
+      transmission: 56.25  
+  wheels_right: 
+    serial_number: '207D395F5841'
+    motor0: 
+      reverse_motor: False
+      transmission: 56.25
+    motor1:
+      reverse_motor: False
+      transmission: 56.25
