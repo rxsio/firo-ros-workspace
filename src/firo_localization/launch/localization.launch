@@ -1,0 +1,12 @@
+<launch>
+    <arg name="imu_name"            default="front_camera"/>
+    <node pkg="imu_transformer" type="imu_transformer_node" name="imu_data_transformer" output="screen">
+        <remap from="imu_in" to="/$(arg imu_name)/imu"/>
+        <remap from="imu_out" to="/imu_transformed"/>
+        <param name="target_frame" value="base_link"/>
+    </node>
+    <remap from="~image" to="/front_camera/left/image_rect_gray"/>
+    <include file="$(find marker_based_localization)/launch/aligned_marker_based_localization_ros.launch"/>
+    <include file="$(find firo_localization)/launch/odom_sensor_fusion.launch"/>
+    <include file="$(find firo_localization)/launch/map_sensor_fusion.launch"/>
+</launch>
