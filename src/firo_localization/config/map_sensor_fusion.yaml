@@ -119,7 +119,7 @@ pose0_differential: false
 pose1: /amcl_pose
 pose1_config: [true,  true,  true,
                 false, false, false,
-                false, false, false,
+                true, true, true,
                 false, false, false,
                 false, false, false]
 pose1_queue_size: 10

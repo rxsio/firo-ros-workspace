@@ -11,4 +11,6 @@
   <exec_depend>imu_complementary_filter</exec_depend>
   <exec_depend>imu_filter_madgwick</exec_depend>
   <exec_depend>imu_transformer</exec_depend>
+  <exec_depend>gmapping</exec_depend>
+  <exec_depend>amcl</exec_depend>
 </package>
