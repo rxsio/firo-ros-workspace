@@ -7,3 +7,6 @@
 [submodule "src/marker_based_localization"]
 	path = src/marker_based_localization
 	url = https://github.com/rxsio/marker_based_localization.git
+[submodule "src/depth_nav_tools"]
+	path = src/depth_nav_tools
+	url = https://github.com/mdrwiega/depth_nav_tools.git
