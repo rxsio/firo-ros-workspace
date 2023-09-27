@@ -64,6 +64,14 @@ auto getRGBResolution(std::string resolution)
   {
     return std::make_tuple(4208, 3120, rgbResolution::THE_13_MP);
   }
+  else if (resolution == "800p")
+  {
+    return std::make_tuple(1280, 800, rgbResolution::THE_800_P);
+  }
+  else if (resolution == "720p")
+  {
+    return std::make_tuple(1280, 720, rgbResolution::THE_720_P);
+  }
   else
   {
     ROS_ERROR("Invalid parameter. -> rgbResolution: %s", resolution.c_str());
@@ -98,14 +106,25 @@ auto addDepthPipeline(dai::Pipeline& pipeline, int fps, dai::node::ColorCamera::
                       std::string name, dai::CameraBoardSocket socket)
 {
   auto stereo = pipeline.create<dai::node::StereoDepth>();
-
+  stereo->setDefaultProfilePreset(dai::node::StereoDepth::PresetMode::HIGH_DENSITY);
+  stereo->initialConfig.setMedianFilter(dai::MedianFilter::KERNEL_7x7);
   stereo->initialConfig.setConfidenceThreshold(200);    // Known to be best
   stereo->setRectifyEdgeFillColor(0);                   // black, to better see the cutout
   stereo->initialConfig.setLeftRightCheckThreshold(5);  // Known to be best
   stereo->setLeftRightCheck(true);
   stereo->setExtendedDisparity(false);
   stereo->setSubpixel(true);
-  stereo->setRectifyEdgeFillColor(0);
+  auto config = stereo->initialConfig.get();
+  config.postProcessing.speckleFilter.enable = true;
+  config.postProcessing.speckleFilter.speckleRange = 50;
+  // config.postProcessing.temporalFilter.enable = true;
+  config.postProcessing.spatialFilter.enable = true;
+  config.postProcessing.spatialFilter.holeFillingRadius = 2;
+  config.postProcessing.spatialFilter.numIterations = 1;
+  // config.postProcessing.thresholdFilter.minRange = 400;
+  // config.postProcessing.thresholdFilter.maxRange = 15000;
+  // config.postProcessing.decimationFilter.decimationFactor = 1;
+  stereo->initialConfig.set(config);
 
   return stereo;
 }
@@ -134,10 +153,10 @@ std::tuple<dai::Pipeline, int, int> createPipeline(int fps, int imu_frequency, s
   std::tie(stereoWidth, stereoHeight, monoResolution) = getMonoResolution(stereoResolution);
   auto rgbResolution = std::get<2>(getRGBResolution(colorResolution));
 
-  auto left_pipe = addMonoPipeline(pipeline, fps, monoResolution, "left", dai::CameraBoardSocket::LEFT);
-  auto right_pipe = addMonoPipeline(pipeline, fps, monoResolution, "right", dai::CameraBoardSocket::RIGHT);
-  addRGBPipeline(pipeline, fps, rgbResolution, "rgb", dai::CameraBoardSocket::RGB);
-  auto depth_pipe = addDepthPipeline(pipeline, fps, rgbResolution, "depth", dai::CameraBoardSocket::RGB);
+  auto left_pipe = addMonoPipeline(pipeline, fps, monoResolution, "left", dai::CameraBoardSocket::CAM_B);
+  auto right_pipe = addMonoPipeline(pipeline, fps, monoResolution, "right", dai::CameraBoardSocket::CAM_C);
+  addRGBPipeline(pipeline, fps, rgbResolution, "rgb", dai::CameraBoardSocket::CAM_A);
+  auto depth_pipe = addDepthPipeline(pipeline, fps, rgbResolution, "depth", dai::CameraBoardSocket::CAM_A);
   addIMUPipeline(pipeline, imu_frequency, "imu");
 
   auto xOutLeft = pipeline.create<dai::node::XLinkOut>();
@@ -258,11 +277,11 @@ int main(int argc, char** argv)
                                             angularVelCovariance, rotationCovariance, magneticCovariance, true);
 
   auto leftCameraInfo =
-      converter.calibrationToCameraInfo(calibrationHandler, dai::CameraBoardSocket::LEFT, width, height);
+      converter.calibrationToCameraInfo(calibrationHandler, dai::CameraBoardSocket::CAM_B, width, height);
   auto rightCameraInfo =
-      converter.calibrationToCameraInfo(calibrationHandler, dai::CameraBoardSocket::RIGHT, width, height);
+      converter.calibrationToCameraInfo(calibrationHandler, dai::CameraBoardSocket::CAM_C, width, height);
   auto rgbCameraInfo =
-      rgbConverter.calibrationToCameraInfo(calibrationHandler, dai::CameraBoardSocket::RGB, width, height);
+      rgbConverter.calibrationToCameraInfo(calibrationHandler, dai::CameraBoardSocket::CAM_A, width, height);
 
   auto leftQueue = device->getOutputQueue("left", 30, false);
   auto rightQueue = device->getOutputQueue("right", 30, false);
