@@ -11,21 +11,25 @@
     <include file="$(find firo_localization)/launch/map_sensor_fusion.launch"/>
 
     <node name="laserscan_kinect" pkg="laserscan_kinect" type="laserscan_kinect">
-        <remap from="~image" to="/front_camera/depth/depth_registered"/>
+        <remap from="~image" to="/front_camera/depth/depth_registered_raw"/>
         <remap from="~camera_info" to="/front_camera/depth/camera_info"/>
         <param name="output_frame_id" value="front_left_camera_frame" />
-        <param name="tilt_compensation_en" value="False" />
+        <param name="tilt_compensation_en" value="True" />
         <param name="ground_remove_en" value="True" />
         <param name="range_max" value="10" />
         <param name="range_min" value="0.2" />
-        <param name="sensor_tilt_angle" value="0.0" />
-        <param name="sensor_mount_height" value="0.15" />
+        <param name="sensor_tilt_angle" value="0.20" />
+        <param name="sensor_mount_height" value="0.05" />
     </node>
 
+<!--
     <node pkg="gmapping" type="slam_gmapping" name="gmapping">
         <remap from="scan" to="/laserscan_kinect/scan" />
         <param name="transform_publish_period" value="0.0" />
+        <param name="map_update_interval" value="1.0" />
+        <param name="temporalUpdate" value="1.0" />
     </node>
+
     <node pkg="amcl" type="amcl" name="amcl">
         <remap from="scan" to="/laserscan_kinect/scan" />
         <remap from="/odom" to="/odometry/filtered"/>
@@ -35,4 +39,5 @@
         <param name="odom_model_type" value="diff-corrected"/>
     </node>
 
+-->
 </launch>
