@@ -9,4 +9,44 @@
     <include file="$(find marker_based_localization)/launch/aligned_marker_based_localization_ros.launch"/>
     <include file="$(find firo_localization)/launch/odom_sensor_fusion.launch"/>
     <include file="$(find firo_localization)/launch/map_sensor_fusion.launch"/>
+
+    <node name="laserscan_kinect" pkg="laserscan_kinect" type="laserscan_kinect">
+        <remap from="~image" to="/front_camera/depth/depth_registered"/>
+        <remap from="~camera_info" to="/front_camera/depth/camera_info"/>
+        <param name="output_frame_id" value="front_left_camera_frame" />
+        <param name="tilt_compensation_en" value="True" />
+        <param name="ground_remove_en" value="True" />
+        <param name="range_max" value="10" />
+        <param name="range_min" value="0.2" />
+        <param name="sensor_tilt_angle" value="0.00" />
+        <param name="sensor_mount_height" value="0.15" />
+    </node>
+
+    <node pkg="amcl" type="amcl" name="amcl" clear_params="true">
+        <remap from="scan" to="/laserscan_kinect/scan" />
+        <remap from="map" to="/move_base/global_costmap/costmap"/>
+
+        <param name="use_map_topic" value="true"/>
+        <param name="tf_broadcast" value="false" />
+        <param name="odom_model_type" value="diff-corrected"/>
+
+        <param name="update_min_d" value="0.05"/>
+        <param name="update_min_a" value="0.05"/>
+
+        <param name="odom_alpha1" value="0.5"/>
+        <param name="odom_alpha2" value="0.5"/>
+        <param name="odom_alpha3" value="0.5"/>
+        <param name="odom_alpha4" value="0.5"/>
+    </node>
+
+    <node pkg="tf2_ros" type="static_transform_publisher" name="local_to_artag_0"   args=" 2     0     0    3.14 0 0 map artag_1"/>
+
+    <include file="$(find marker_description)/launch/marker_spawner.launch" >
+        <arg name="id" value="1"/>
+        <arg name="sides" default="1"/>
+        <arg name="x" value="2"/>
+        <arg name="y" value="0"/>
+        <arg name="z" value="0"/>
+        <arg name="Y" value="3.14"/>
+    </include>
 </launch>

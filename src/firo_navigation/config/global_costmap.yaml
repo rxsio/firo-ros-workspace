@@ -1,9 +1,10 @@
 plugins: 
   - {name: obstacles,        type: "costmap_2d::ObstacleLayer"}    
-  - {name: inflation,        type: "costmap_2d::InflationLayer"}
+  #- {name: inflation,        type: "costmap_2d::InflationLayer"}
 global_frame: map
 transform_tolerance: 2
 update_frequency: 0.5
+publish_frequency: 0.2
 width: 40
 height: 40
 # resolution: 0.1
