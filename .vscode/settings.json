@@ -26,4 +26,7 @@
         "logs*/": true,
         ".cache*/": true,
     },
+    "[python]": {
+        "editor.defaultFormatter": "eeyore.yapf"
+    },
 }

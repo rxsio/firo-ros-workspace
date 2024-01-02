@@ -4,6 +4,7 @@
         "llvm-vs-code-extensions.vscode-clangd",
         "cheshirekow.cmake-format",
         "ms-python.python",
-        "ms-iot.vscode-ros"
+        "ms-iot.vscode-ros",
+        "eeyore.yapf"
     ]
 }
